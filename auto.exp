@@ -1,0 +1,15 @@
+#!/usr/bin/expect
+set timeout 60
+set user [ lindex $argv 0 ]
+set rip [ lindex $argv 1 ]
+set passwd [ lindex $argv 2]
+spawn scp /root/project/selinux.sh $user@$rip:/
+expect {
+	"yes/no" { send "yes\r";exp_continue }
+	"*password:" { send "$passwd\r"}
+}
+expect "]#"
+send "bash /selinux.sh"
+send "exit"
+expect eof
+
